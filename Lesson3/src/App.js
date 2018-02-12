@@ -13,11 +13,21 @@ export default class App extends Component {
 
     changeHandler = e => {
         // this.setState({ bottomLine: parseInt(e.target.value) })
-        const value = e.target.value.replace(/[^\d]/,'')
+        let value = e.target.value.replace(/[^\d]/,'')
 
-        if(!(value === "")) {
-            this.setState({ bottomLine: value })
+        if(value !== "") {
+            if(value[0] === "0"){
+                value = value.substr(1)
+                if(value === "")
+                    this.setState({ bottomLine: "0" })
+                else
+                    this.setState({ bottomLine: value })
+            }
+            else
+                this.setState({ bottomLine: value })
         }
+        else
+            this.setState({ bottomLine: "0" })
     }
 
     render () {
