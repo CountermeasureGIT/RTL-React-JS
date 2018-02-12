@@ -1,14 +1,23 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import Button from './Button'
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            upperLine: "",
-            operationCode: "",
-            bottomLine: ""
+            upperLine: "22",
+            operationCode: "*",
+            bottomLine: "0"
         };
+    }
+
+    changeHandler = e => {
+        // this.setState({ bottomLine: parseInt(e.target.value) })
+        const value = e.target.value.replace(/[^\d]/,'')
+
+        if(!(value === "")) {
+            this.setState({ bottomLine: value })
+        }
     }
 
     render () {
@@ -18,13 +27,13 @@ export default class App extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td colSpan="4" align="right">{this.state.upperLine}</td>
+                        <td colSpan="4" align="right">{ this.state.upperLine }</td>
                     </tr>
                     <tr>
-                        <td colSpan="4" align="right">{this.state.operationCode}</td>
+                        <td colSpan="4" align="right">{ this.state.operationCode }</td>
                     </tr>
                     <tr>
-                        <td colSpan="4"><input value="3" style="text-align: right"/></td>
+                        <td colSpan="4"><input value={ this.state.bottomLine } style={{ textAlign: "right" } } onChange={ this.changeHandler }/></td>
                     </tr>
 
                     <tr>
@@ -59,6 +68,4 @@ export default class App extends Component {
             </div>
         )
     }
-
 }
-
