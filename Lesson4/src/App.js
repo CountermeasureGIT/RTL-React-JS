@@ -5,13 +5,12 @@ export default class App extends Component {
     state = {
         previousDisplayValue: "",
         operationCode: "",
-        currentDisplayValue: "0",
-        dot: false
+        currentDisplayValue: "0"
     }
 
     actionHandler = btnAction => {
         console.log("button")
-        let { previousDisplayValue, currentDisplayValue, operationCode, dot } = this.state
+        let { previousDisplayValue, currentDisplayValue, operationCode } = this.state
 
         switch (btnAction) {
             case '+':
@@ -26,17 +25,8 @@ export default class App extends Component {
                 this.setState({
                     previousDisplayValue: currentDisplayValue,
                     operationCode: btnAction,
-                    currentDisplayValue: '0',
+                    currentDisplayValue: '0'
                 })
-                return
-            case '.':
-                if(dot)
-                    return
-                else
-                    this.setState({
-                        dot: true,
-                        currentDisplayValue: currentDisplayValue + '.'
-                    })
                 return
             case '0':
             case '1':
@@ -55,14 +45,14 @@ export default class App extends Component {
                 this.setState({
                     previousDisplayValue: undefined,
                     operationCode: undefined,
-                    currentDisplayValue,
+                    currentDisplayValue
                 })
                 return
             case 'c':
                 this.setState({
                     previousDisplayValue: undefined,
                     operationCode: undefined,
-                    currentDisplayValue: '0',
+                    currentDisplayValue: '0'
                 })
                 return
         }
@@ -88,13 +78,9 @@ export default class App extends Component {
             key = '='
         } else if (key === 'Escape') {
             key = 'c'
-        } else if (key === ',') {
-            key = '.'
-        } else if (key === 'Backspace') {
-            key = '<'
         }
 
-        if (['/', '*', '-', '+', '=', '.', '<'].includes(key)) {
+        if (['/', '*', '-', '+', '='].includes(key)) {
             this.actionHandler(key)
         }
     }
@@ -102,8 +88,8 @@ export default class App extends Component {
     changeEvent = e => {
         console.log("ChangeEvent")
         const text = e.target.value
-        if (text.match(/[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)/)) {
-            this.setState({ currentDisplayValue: (Number(text).toString() + this.state.dot ? '.':'') })
+        if (!isNaN(text)) {
+            this.setState({ currentDisplayValue: +text })
         } else {
             return false
         }
@@ -134,34 +120,34 @@ export default class App extends Component {
                             /></td>
                     </tr>
                     <tr>
-                        <td><Button action="c" handler={this.actionHandler}/></td>
+
                     </tr>
                     <tr>
                         <td><Button action="1" handler={this.actionHandler}/></td>
                         <td><Button action="2" handler={this.actionHandler}/></td>
                         <td><Button action="3" handler={this.actionHandler}/></td>
-                        <td><Button action="/" handler={this.actionHandler}/></td>
+                        <td><Button action="c" handler={this.actionHandler}/></td>
                     </tr>
 
                     <tr>
                         <td><Button action="4" handler={this.actionHandler}/></td>
                         <td><Button action="5" handler={this.actionHandler}/></td>
                         <td><Button action="6" handler={this.actionHandler}/></td>
-                        <td><Button action="*" handler={this.actionHandler}/></td>
+                        <td><Button action="/" handler={this.actionHandler}/></td>
                     </tr>
 
                     <tr>
                         <td><Button action="7" handler={this.actionHandler}/></td>
                         <td><Button action="8" handler={this.actionHandler}/></td>
                         <td><Button action="9" handler={this.actionHandler}/></td>
-                        <td><Button action="-" handler={this.actionHandler}/></td>
+                        <td><Button action="*" handler={this.actionHandler}/></td>
                     </tr>
 
                     <tr>
-                        <td><Button action="." handler={this.actionHandler}/></td>
+                        <td><Button action="-" handler={this.actionHandler}/></td>
                         <td><Button action="0" handler={this.actionHandler}/></td>
-                        <td><Button action="=" handler={this.actionHandler}/></td>
                         <td><Button action="+" handler={this.actionHandler}/></td>
+                        <td><Button action="=" handler={this.actionHandler}/></td>
                     </tr>
                     </tbody>
                 </table>
