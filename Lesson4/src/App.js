@@ -9,6 +9,15 @@ export default class App extends Component {
         dot: false
     }
 
+    updateDotState(text) {
+        console.log(text)
+        const flag = text.toString().includes('.')
+        if(flag)
+            this.setState({dot: true})
+        else
+            this.setState({dot: false})
+    }
+
     actionHandler = btnAction => {
         console.log("button")
         let { previousDisplayValue, currentDisplayValue, operationCode, dot } = this.state
@@ -26,17 +35,15 @@ export default class App extends Component {
                 this.setState({
                     previousDisplayValue: currentDisplayValue,
                     operationCode: btnAction,
-                    currentDisplayValue: '0',
+                    currentDisplayValue: '0'
                 })
+                this.updateDotState(currentDisplayValue)
                 return
             case '.':
-                if(dot)
-                    return
-                else
-                    this.setState({
-                        dot: true,
-                        currentDisplayValue: currentDisplayValue + '.'
-                    })
+                this.updateDotState(currentDisplayValue)
+                this.setState({
+                    currentDisplayValue: currentDisplayValue + (dot ? '.' : '')
+                })
                 return
             case '0':
             case '1':
@@ -55,14 +62,16 @@ export default class App extends Component {
                 this.setState({
                     previousDisplayValue: undefined,
                     operationCode: undefined,
-                    currentDisplayValue,
+                    currentDisplayValue
                 })
+                this.updateDotState(currentDisplayValue)
                 return
             case 'c':
                 this.setState({
                     previousDisplayValue: undefined,
                     operationCode: undefined,
                     currentDisplayValue: '0',
+                    dot: false
                 })
                 return
         }
@@ -75,6 +84,7 @@ export default class App extends Component {
 
         if(matcher) {
             this.setState({currentDisplayValue: Number(matcher[0]).toString()})
+            this.updateDotState(this.state.currentDisplayValue)
         } else {
             return false
         }
@@ -88,13 +98,9 @@ export default class App extends Component {
             key = '='
         } else if (key === 'Escape') {
             key = 'c'
-        } else if (key === ',') {
-            key = '.'
-        } else if (key === 'Backspace') {
-            key = '<'
         }
 
-        if (['/', '*', '-', '+', '=', '.', '<'].includes(key)) {
+        if (['/', '*', '-', '+', '=', 'c', '.'].includes(key)) {
             this.actionHandler(key)
         }
     }
@@ -102,11 +108,13 @@ export default class App extends Component {
     changeEvent = e => {
         console.log("ChangeEvent")
         const text = e.target.value
-        if (text.match(/[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)/)) {
-            this.setState({ currentDisplayValue: (Number(text).toString() + this.state.dot ? '.':'') })
-        } else {
-            return false
+        console.log(text)
+        if (!isNaN(text)){
+            this.setState({ currentDisplayValue: +text })
+            this.updateDotState(this.state.currentDisplayValue)
         }
+        else
+            return false
     }
 
 
